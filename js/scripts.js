@@ -62,6 +62,7 @@ SquareObject.prototype.hasPiece = function(){
 	return this.piece !== null;
 }
 
+//Piece Class - Each piece inherits from this
 let Piece = function(x, y, color, type){
 	this.color = color;
 	this.type = type;
@@ -76,6 +77,7 @@ Piece.prototype.capture = function(){
 	this.captured = true;
 }
 
+//Castle Piece Class (Rook) - Inherits from 'Piece'
 let Castle = function(x, y, color){
 	this.color = color;
 	this.type = "castle";
@@ -123,7 +125,7 @@ Castle.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
-
+//Knight Piece Class - Inherits from 'Piece'
 let Knight = function(x, y, color){
 	this.color = color;
 	this.type = "knight";
@@ -162,7 +164,7 @@ Knight.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
-
+//Bishop Piece Class - Inherits from 'Piece'
 let Bishop = function(x, y, color){
 	this.color = color;
 	this.type = "bishop";
@@ -210,6 +212,7 @@ Bishop.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+//Queen Piece Class - Inherits from 'Piece'
 let Queen = function(x, y, color){
 	this.color = color;
 	this.type = "queen";
@@ -257,6 +260,7 @@ Queen.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+//King Piece Class - Inherits from 'Piece'
 let King = function(x, y, color){
 	this.color = color;
 	this.type = "king";
@@ -427,6 +431,7 @@ King.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+//Pawn Piece Class - Inherits from 'Piece'
 let Pawn = function(x, y, color){
 	this.color = color;
 	this.type = "pawn";
@@ -494,6 +499,7 @@ Pawn.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+//Sets up Chess Board for play
 let setup = function(){
 	let boardContainer = document.getElementById("board");
 	for(let i = 1; i <= 8; i++){
@@ -509,6 +515,7 @@ let setup = function(){
 			boardContainer.appendChild(squareElement);
 		}
 	}
+  //Each Piece is then pushed to an array that holds each piece.
     white.king = new King(5, 8, "white");
     black.king = new King(5, 1, "black");
     pieces.push(white.king);
@@ -544,6 +551,7 @@ let setup = function(){
 	pieces.push(new Bishop(6, 8, "white"));
 	pieces.push(new Knight(7, 8, "white"));
 	pieces.push(new Castle(8, 8, "white"));
+  
 	for(let i = 0; i < pieces.length; i++){
 		getSquare(pieces[i].x, pieces[i].y).setPiece(pieces[i]);
 	}
