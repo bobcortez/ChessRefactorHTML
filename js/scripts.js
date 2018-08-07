@@ -499,6 +499,14 @@ Pawn.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+function removeElementsByClass(className){
+    var elements = document.getElementsByClassName(className);
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+}
+
+//Board Div Element for setup function
 let boardContainer = document.getElementById("board");
 //Sets up Chess Board for play
 let setup = function(){
@@ -509,7 +517,7 @@ let setup = function(){
         nextTurn();
     }
 
-    boardContainer.innerHTML = "";
+    removeElementsByClass("square");
 	for(let i = 1; i <= 8; i++){
 		for (let j = 1; j <= 8; j++){
 			let squareElement = document.createElement("div");
@@ -1105,3 +1113,96 @@ let nextTurn = function(){
         document.getElementById("turnInfo").innerHTML = "Player's turn: <b>White</b>";
 	}
 }
+
+//Inclusive RNG
+let getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+let nsix_setup = function(){
+    //Resets Board, Pieces, and Player Turn.
+    pieces = [];
+    boardSquares = [];
+    if(currentPlayer == black) {
+        nextTurn();
+    }
+
+    removeElementsByClass("square");
+	for(let i = 1; i <= 8; i++){
+		for (let j = 1; j <= 8; j++){
+			let squareElement = document.createElement("div");
+			let color = (j+i) % 2 ? "dark" : "light";
+			squareElement.addEventListener("click", squareClicked);
+			squareElement.setAttribute("data-x", j);
+			squareElement.setAttribute("data-y", i);
+			let square = new SquareObject(j, i, color, false, squareElement, null);
+			square.update();
+			boardSquares.push(square);
+			boardContainer.appendChild(squareElement);
+		}
+    }
+
+    let nums = [1, 2, 3, 4, 5, 6, 7, 8];
+    // console.log("B4: " + nums)
+    let k_piece = getRandomInt(2, 6);
+    nums.splice(nums.indexOf(k_piece), 1);
+
+    let rook_piece = k_piece - 1;
+    nums.splice(nums.indexOf(rook_piece), 1);
+
+    let q_piece = k_piece + 1;
+    nums.splice(nums.indexOf(q_piece), 1);
+
+    let rook_odd = q_piece + 1;
+    nums.splice(nums.indexOf(rook_odd), 1);
+
+    //Source of my problems.
+    let b_shop = nums[getRandomInt(1, nums.length-1)];
+    nums.splice(nums.indexOf(b_shop), 1);
+
+    let b_odd = nums[getRandomInt(1, nums.length-1)];
+    nums.splice(nums.indexOf(b_odd), 1);
+
+    let kni_ght = nums[getRandomInt(1, nums.length-1)];
+    nums.splice(nums.indexOf(kni_ght), 1);
+
+    let kni_odd = nums[0];
+    nums.splice(nums.indexOf(kni_odd), 1);
+    // console.log("AF: " + nums);
+
+    //Each Piece is then pushed to an array that holds each piece.
+    white.king = new King(k_piece, 8, "white");
+    black.king = new King(k_piece, 1, "black");
+    pieces.push(white.king);
+    pieces.push(black.king);
+
+    for (i = 1; i < 9; i++){
+        pieces.push(new Pawn(i, 2, "black"));
+    }
+
+    for (i = 1; i < 9; i++){
+        pieces.push(new Pawn(i, 7, "white"));
+    }
+
+	pieces.push(new Castle(rook_piece, 1, "black"));
+	pieces.push(new Castle(rook_piece, 8, "white"));
+	pieces.push(new Queen(q_piece, 1, "black"));
+	pieces.push(new Queen(q_piece, 8, "white"));
+    pieces.push(new Castle(rook_odd, 1, "black"));
+    pieces.push(new Castle(rook_odd, 8, "white"));
+	pieces.push(new Bishop(b_shop, 1, "black"));
+	pieces.push(new Bishop(b_shop, 8, "white"));
+	pieces.push(new Bishop(b_odd, 8, "white"));
+	pieces.push(new Bishop(b_odd, 1, "black"));
+	pieces.push(new Knight(kni_ght, 1, "black"));
+	pieces.push(new Knight(kni_ght, 8, "white"));
+	pieces.push(new Knight(kni_odd, 1, "black"));
+	pieces.push(new Knight(kni_odd, 8, "white"));
+    
+  
+	for(let i = 0; i < pieces.length; i++){
+		getSquare(pieces[i].x, pieces[i].y).setPiece(pieces[i]);
+    }
+};
+
+document.getElementById("chess_960").addEventListener("click", nsix_setup);
