@@ -1,6 +1,5 @@
 // jshint esversion: 6
 // jshint browser: true
-
 let pieces = [];
 
 let boardSquares = [];
@@ -999,7 +998,8 @@ let isCheckmate = function(king){
 
 let showPromotion = function(player){
 	document.getElementById("promotionMessage").className = "overlay show";
-	document.getElementById("promotionList").className = player.color;
+    document.getElementById("promotionList").className = player.color;
+    console.log("Promotion given to the player: [" + player.color + "]. Pick a piece!");
 };
 
 let closePromotion = function(){
@@ -1111,7 +1111,9 @@ let nextTurn = function(){
 	}else{
 		currentPlayer = white;
         document.getElementById("turnInfo").innerHTML = "Player's turn: <b>White</b>";
-	}
+    }
+    
+    console.log("Current Player is: [" + currentPlayer.color + "] player.");
 }
 
 //Inclusive RNG
@@ -1206,3 +1208,5 @@ let nsix_setup = function(){
 };
 
 document.getElementById("chess_960").addEventListener("click", nsix_setup);
+
+//module.exports = { nextTurn, getRandomInt, showError, showEnd, showPromotion };
