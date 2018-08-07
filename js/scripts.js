@@ -499,9 +499,17 @@ Pawn.prototype.isValidMove = function(toSquare,n=1){
 	return result;
 }
 
+let boardContainer = document.getElementById("board");
 //Sets up Chess Board for play
 let setup = function(){
-	let boardContainer = document.getElementById("board");
+    //Resets Board, Pieces, and Player Turn.
+    pieces = [];
+    boardSquares = [];
+    if(currentPlayer == black) {
+        nextTurn();
+    }
+
+    boardContainer.innerHTML = "";
 	for(let i = 1; i <= 8; i++){
 		for (let j = 1; j <= 8; j++){
 			let squareElement = document.createElement("div");
@@ -527,23 +535,16 @@ let setup = function(){
 	pieces.push(new Queen(4, 1, "black"));
 	pieces.push(new Bishop(6, 1, "black"));
 	pieces.push(new Knight(7, 1, "black"));
-	pieces.push(new Castle(8, 1, "black"));
-	pieces.push(new Pawn(1, 2, "black"));
-	pieces.push(new Pawn(2, 2, "black"));
-	pieces.push(new Pawn(3, 2, "black"));
-	pieces.push(new Pawn(4, 2, "black"));
-	pieces.push(new Pawn(5, 2, "black"));
-	pieces.push(new Pawn(6, 2, "black"));
-	pieces.push(new Pawn(7, 2, "black"));
-	pieces.push(new Pawn(8, 2, "black"));
-	pieces.push(new Pawn(1, 7, "white"));
-	pieces.push(new Pawn(2, 7, "white"));
-	pieces.push(new Pawn(3, 7, "white"));
-	pieces.push(new Pawn(4, 7, "white"));
-	pieces.push(new Pawn(5, 7, "white"));
-	pieces.push(new Pawn(6, 7, "white"));
-	pieces.push(new Pawn(7, 7, "white"));
-	pieces.push(new Pawn(8, 7, "white"));
+    pieces.push(new Castle(8, 1, "black"));
+    
+    for (i = 1; i < 9; i++){
+        pieces.push(new Pawn(i, 2, "black"));
+    }
+
+    for (i = 1; i < 9; i++){
+        pieces.push(new Pawn(i, 7, "white"));
+    }
+    
 	pieces.push(new Castle(1, 8, "white"));
 	pieces.push(new Knight(2, 8, "white"));
 	pieces.push(new Bishop(3, 8, "white"));
@@ -554,8 +555,10 @@ let setup = function(){
   
 	for(let i = 0; i < pieces.length; i++){
 		getSquare(pieces[i].x, pieces[i].y).setPiece(pieces[i]);
-	}
+    }
 };
+
+document.getElementById("new_game").addEventListener("click", setup);
 
 let showError = function(message){
 	document.getElementById("errorText").innerHTML = message;
